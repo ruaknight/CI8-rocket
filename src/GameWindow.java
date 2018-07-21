@@ -27,16 +27,16 @@ public class GameWindow extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    gameCanvas.positionYPlayer -= 3;
+                    gameCanvas.positionYPlayer -= 10;
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    gameCanvas.positionYPlayer += 3;
+                    gameCanvas.positionYPlayer += 10;
                 }
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    gameCanvas.positionXPlayer -= 3;
+                    gameCanvas.positionXPlayer -= 10;
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    gameCanvas.positionXPlayer += 3;
+                    gameCanvas.positionXPlayer += 10;
                 }
             }
 

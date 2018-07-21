@@ -78,19 +78,19 @@ public class GameCanvas extends JPanel {
     }
 
     public void updatePosPlayer() {
-        if (positionXPlayer >= 1024) {
+        if (positionXPlayer > 1024) {
             positionXPlayer = 0;
             positionYPlayer = random.nextInt(600);
         }
-        if (positionXPlayer <= 0) {
+        if (positionXPlayer < 0) {
             positionXPlayer = 1024;
             positionYPlayer = random.nextInt(600);
         }
-        if (positionYPlayer >= 600) {
+        if (positionYPlayer > 600) {
             positionYPlayer = 0;
             positionXPlayer = random.nextInt(1024);
         }
-        if (positionYPlayer <= 0) {
+        if (positionYPlayer < 0) {
             positionYPlayer = 600;
             positionXPlayer = random.nextInt(1024);
         }
