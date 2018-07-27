@@ -5,105 +5,107 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class GameCanvas extends JPanel {
 
-    private BufferedImage starImage;
+    private List<Star> stars;
     private BufferedImage backBuffered;
-    private BufferedImage playerImage;
-    private BufferedImage enemy;
 
-    public int positionXPlayer = 600;
-    public int positionYPlayer = 200;
-
-    public int positionXEnemy = 100;
-    public int positionYEnemy = 100;
-    private int vectorX = 1;
-    private int vectorY = 1;
-
-    public ArrayList<Star> stars = new ArrayList<>();
+    public Player player;
 
     private Graphics graphics;
 
     private Random random = new Random();
 
+    private int timeIntervalStar = 0;
+
     public GameCanvas() {
-
         this.setSize(1024, 600);
+        this.setupBackBuffered();
+        this.setupCharacter();
+        this.setVisible(true);
+    }
 
+    private void setupBackBuffered() {
         this.backBuffered = new BufferedImage(1024, 600, BufferedImage.TYPE_INT_ARGB);
         this.graphics = this.backBuffered.getGraphics();
+    }
 
-        // load anh
-        try {
-            this.starImage = ImageIO.read(new File("resources/images/star.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setupCharacter() {
+        this.createPlayer();
+        this.setupStar();
+    }
 
-        try {
-            this.playerImage = ImageIO.read(new File("resources/images/circle.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            this.enemy = ImageIO.read(new File("resources/images/circle.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // draw
-
-        this.setVisible(true);
+    private void setupStar() {
+        this.stars = new ArrayList<>();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         g.drawImage(this.backBuffered, 0, 0, null);
-
     }
 
     public void renderAll() {
-        this.graphics.setColor(Color.BLACK);
-        this.graphics.fillRect(0, 0, 1024, 600);
-        for (Star i : stars) {
-            i.move();
-            this.graphics.drawImage(this.starImage, i.posX, i.posY, 5, 5, null);
-        }
-        this.graphics.drawImage(this.playerImage, this.positionXPlayer, this.positionYPlayer, 20, 20, null);
-        this.graphics.drawImage(this.enemy, this.positionXEnemy, this.positionYEnemy, 10, 10, null);
-
+        this.renderBackground();
+        this.stars.forEach(star -> star.render(graphics));
+        this.player.render(graphics);
         this.repaint();
     }
 
-    public void updatePosPlayer() {
-        if (positionXPlayer > 1024) {
-            positionXPlayer = 0;
-            positionYPlayer = random.nextInt(600);
-        }
-        if (positionXPlayer < 0) {
-            positionXPlayer = 1024;
-            positionYPlayer = random.nextInt(600);
-        }
-        if (positionYPlayer > 600) {
-            positionYPlayer = 0;
-            positionXPlayer = random.nextInt(1024);
-        }
-        if (positionYPlayer < 0) {
-            positionYPlayer = 600;
-            positionXPlayer = random.nextInt(1024);
+    public void runAll() {
+        this.createStar();
+        this.stars.forEach(star -> star.run());
+    }
+
+    private void createPlayer() {
+        player = new Player();
+    }
+
+    private void createStar() {
+        if (this.timeIntervalStar == 30) {
+            Star star = new Star();
+            star.x = 1024;
+            star.y = this.random.nextInt(600);
+            star.image = this.loadImage("resources/images/star.png");
+            star.width = 5;
+            star.height = 5;
+            star.velocityX = this.random.nextInt(3) + 1;
+            this.stars.add(star);
+            this.timeIntervalStar = 0;
+        } else {
+            this.timeIntervalStar += 1;
         }
     }
 
-    public void moveEnemy() {
-        positionXEnemy += 5 * vectorX;
-        positionYEnemy += 5 * vectorY;
-        if (positionXEnemy >= 1024 || positionXEnemy <= 0) vectorX = vectorX * -1;
-        if (positionYEnemy >= 600 || positionYEnemy <= 0) vectorY = vectorY * -1;
+    public void playerMove(String direction) {
+        switch (direction) {
+            case "up":
+                player.move("up");
+                break;
+            case "down":
+                player.move("down");
+                break;
+            case "left":
+                player.move("left");
+                break;
+            case "right":
+                player.move("right");
+                break;
+        }
     }
 
-    public void newStar() {
-        stars.add(new Star(1024, random.nextInt(600)));
+    private void renderBackground() {
+        this.graphics.setColor(Color.BLACK);
+        this.graphics.fillRect(0, 0, 1024, 600);
+    }
+
+    private BufferedImage loadImage(String path) {
+        try {
+            return ImageIO.read(new File(path));
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
