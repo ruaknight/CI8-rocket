@@ -6,6 +6,8 @@ public class Player {
     public int[] x = {100, 120, 120};
     public int[] y = {50, 50, 70};
     private Polygon P;
+    public int centerX;
+    public int centerY;
 
     public Player() {
         P = new Polygon();
@@ -17,25 +19,27 @@ public class Player {
     public void move(String direction) {
         switch (direction) {
             case "up":
-                x[1] += 10; x[2] += 10; x[3] += 10;
-//                y[1] += 5; y[2] += 5; y[3] += 5;
+                y[0] -= 10; y[1] -= 10; y[2] -= 10;
                 break;
             case "down":
-//                y[1] -= 5; y[2] -= 5; y[3] -= 5;
+                y[0] += 10; y[1] += 10; y[2] += 10;
                 break;
             case "left":
-//                x[1] -= 5; x[2] -= 5; x[3] -= 5;
+                x[0] -= 10; x[1] -= 10; x[2] -= 10;
                 break;
             case "right":
-//                x[1] = x[1] + 5;
-//                x[2] = x[2] + 5;
-//                x[3] = x[3] + 5;
-//                y[1] -= 5; y[2] -= 5; y[3] -= 5;
+                x[0] += 10; x[1] += 10; x[2]+= 10;
                 break;
         }
     }
 
+    public void gerCenter() {
+        centerX = (x[0] + x[1] + x[2]) / 3;
+        centerY = (y[0] + y[1] + y[2]) / 3;
+    }
+
     public void render(Graphics g) {
+        this.gerCenter();
         g.setColor(Color.GRAY);
         g.fillPolygon(P);
     }

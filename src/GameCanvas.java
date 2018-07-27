@@ -15,11 +15,13 @@ public class GameCanvas extends JPanel {
 
     public Player player;
 
+    private List<Enemy> enemies;
+
     private Graphics graphics;
 
     private Random random = new Random();
 
-    private int timeIntervalStar = 0;
+    private int timeIntervalStar = 0, timeIntervalEnemy = 1000;
 
     public GameCanvas() {
         this.setSize(1024, 600);
@@ -34,12 +36,17 @@ public class GameCanvas extends JPanel {
     }
 
     private void setupCharacter() {
+        this.setupEnemy();
         this.createPlayer();
         this.setupStar();
     }
 
     private void setupStar() {
         this.stars = new ArrayList<>();
+    }
+
+    private void setupEnemy() {
+        this.enemies = new ArrayList<>();
     }
 
     @Override
@@ -50,6 +57,7 @@ public class GameCanvas extends JPanel {
     public void renderAll() {
         this.renderBackground();
         this.stars.forEach(star -> star.render(graphics));
+        this.enemies.forEach(enemy -> enemy.render(graphics));
         this.player.render(graphics);
         this.repaint();
     }
@@ -57,6 +65,8 @@ public class GameCanvas extends JPanel {
     public void runAll() {
         this.createStar();
         this.stars.forEach(star -> star.run());
+        this.createEnemy();
+        this.enemies.forEach(enemy -> enemy.move(player.centerX, player.centerY));
     }
 
     private void createPlayer() {
@@ -76,6 +86,21 @@ public class GameCanvas extends JPanel {
             this.timeIntervalStar = 0;
         } else {
             this.timeIntervalStar += 1;
+        }
+    }
+
+    private void createEnemy() {
+        if (this.timeIntervalEnemy == 1000) {
+            Enemy enemy = new Enemy();
+            enemy.x = this.random.nextInt(1024);
+            enemy.y = this.random.nextInt(600);
+            enemy.width = 10;
+            enemy.height = 10;
+            enemy.image = this.loadImage("resources/images/circle.png");
+            this.enemies.add(enemy);
+            this.timeIntervalEnemy = 0;
+        } else {
+            this.timeIntervalEnemy += 1;
         }
     }
 
