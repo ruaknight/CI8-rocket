@@ -1,15 +1,11 @@
-
 import javax.swing.*;
-
 import java.awt.event.KeyEvent;
-
 import java.awt.event.KeyListener;
-
 import java.awt.event.WindowAdapter;
-
 import java.awt.event.WindowEvent;
 
 public class GameWindow extends JFrame {
+
     private GameCanvas gameCanvas;
     private long lastTime = 0;
 
@@ -22,7 +18,7 @@ public class GameWindow extends JFrame {
 
     private void setupGameCanvas() {
         this.gameCanvas = new GameCanvas();
-        this.add(this.gameCanvas);
+        this.add(this.gameCanvas);          // check lại wat is zit
     }
 
     private void event() {
@@ -39,24 +35,25 @@ public class GameWindow extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    gameCanvas.playerMove("up");
-                }
-                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    gameCanvas.playerMove("down");
-                }
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    gameCanvas.playerMove("left");
+                    gameCanvas.player.angle -= 5.0;
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    gameCanvas.playerMove("right");
+                    gameCanvas.player.angle += 5.0;
                 }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    gameCanvas.player.velocity.multiply(2f);
+                }
+
+                gameCanvas.player.velocity.set(
+                        new Vector2D(3.5f, 0).rotate(gameCanvas.player.angle)
+                );
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-                    System.out.println("Space Released");
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    gameCanvas.player.velocity.multiply(0.5f);
                 }
             }
         });
@@ -64,14 +61,12 @@ public class GameWindow extends JFrame {
 
     private void windowEvent() {
         this.addWindowListener(new WindowAdapter() {
-
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(1);
             }
         });
     }
-
 
     public void gameLoop() {
         while (true) {
