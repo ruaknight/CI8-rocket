@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 public class BulletEnemy {
     public BufferedImage image;
     public Vector2D position;

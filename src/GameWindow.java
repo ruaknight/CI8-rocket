@@ -5,7 +5,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class GameWindow extends JFrame {
-
     private GameCanvas gameCanvas;
     private long lastTime = 0;
 
@@ -18,7 +17,7 @@ public class GameWindow extends JFrame {
 
     private void setupGameCanvas() {
         this.gameCanvas = new GameCanvas();
-        this.add(this.gameCanvas);          // check lại wat is zit
+        this.add(this.gameCanvas);
     }
 
     private void event() {
@@ -28,33 +27,39 @@ public class GameWindow extends JFrame {
 
     private void keyboardEvent() {
         this.addKeyListener(new KeyListener() {
+            Vector2D defaultVelocity = new Vector2D(3.5f, 0);
+
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
+
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                     gameCanvas.player.angle -= 5.0;
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     gameCanvas.player.angle += 5.0;
                 }
+
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    gameCanvas.player.velocity.multiply(2f);
+                    defaultVelocity = defaultVelocity.multiply(2);
                 }
 
                 gameCanvas.player.velocity.set(
-                        new Vector2D(3.5f, 0).rotate(gameCanvas.player.angle)
+                        defaultVelocity.rotate(gameCanvas.player.angle)
                 );
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    gameCanvas.player.velocity.multiply(0.5f);
+                    defaultVelocity = new Vector2D(3.5f, 0);
                 }
+                gameCanvas.player.velocity.set(
+                        defaultVelocity.rotate(gameCanvas.player.angle)
+                );
             }
         });
     }

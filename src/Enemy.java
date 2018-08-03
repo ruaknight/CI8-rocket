@@ -3,61 +3,54 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Enemy {
     public BufferedImage image;
-
-    public Vector2D velocity;
     public Vector2D position;
     public int width;
     public int height;
+    public Vector2D velocity;
 
     private List<BulletEnemy> bulletEnemies;
     private int timeIntervalBullet = 0;
 
-    private double angle = 5.0f;
-
     public Enemy() {
+        this.position = new Vector2D();
+        this.velocity = new Vector2D();
         this.bulletEnemies = new ArrayList<>();
     }
 
     public void run() {
-        this.position.addUp(velocity);
+        this.position.addUp(this.velocity);
+        this.shoot();
     }
 
-    public void shootRound() {
-        this.velocity = this.velocity.rotate(angle);
-        this.shootBullet();
-    }
-
-    public void trackPlayer(Vector2D vector2D) {
-        this.velocity = vector2D.subtract(this.position).normalized();
-    }
-
-    public void shootBullet() {
-        if (timeIntervalBullet == 10) {
-            BulletEnemy bulletEnemy = new BulletEnemy();
-            try {
-                bulletEnemy.image = ImageIO.read(new File("resources/images/circle.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
+    private void shoot() {
+        if (this.timeIntervalBullet == 30) {
+            for (double angle = 0.0; angle < 360.0; angle += 360.0 / 15) {
+                BulletEnemy bulletEnemy = new BulletEnemy();
+                try {
+                    bulletEnemy.image = ImageIO.read(new File("resources/images/circle.png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                bulletEnemy.position.set(this.position);
+                bulletEnemy.velocity.set(
+                        (new Vector2D(2, 0)).rotate(angle)
+                );
+                this.bulletEnemies.add(bulletEnemy);
             }
-            bulletEnemy.position.set(this.position.x, this.position.y);
-            bulletEnemy.velocity = this.velocity.copy().normalized().multiply(2);
-            this.bulletEnemies.add(bulletEnemy);
             this.timeIntervalBullet = 0;
         } else {
-            this.timeIntervalBullet ++;
+            this.timeIntervalBullet += 1;
         }
         this.bulletEnemies.forEach(bulletEnemy -> bulletEnemy.run());
     }
 
     public void render(Graphics graphics) {
-        graphics.setColor(Color.GRAY);
-        graphics.drawImage(this.image, (int) position.x, (int) position.y, this.width, this.height, null);
+        graphics.drawImage(this.image, (int) this.position.x, (int) this.position.y, this.width, this.height, null);
         this.bulletEnemies.forEach(bulletEnemy -> bulletEnemy.render(graphics));
     }
 }

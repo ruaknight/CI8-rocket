@@ -1,18 +1,17 @@
 import java.awt.*;
-
-public class Star {
+public class BulletPlayer {
     public Vector2D position;
-    public Renderer renderer;
     public Vector2D velocity;
+    public Renderer renderer;
 
-    public Star() {
+    public BulletPlayer() {
         this.position = new Vector2D();
         this.velocity = new Vector2D();
-        this.renderer = new ImageRenderer("resources/images/star.png", 5, 5);
+        this.renderer = new ImageRenderer( "resources/images/circle.png", 5, 5);
     }
 
     public void run() {
-        this.position.subtractBy(this.velocity);
+        this.position.addUp(this.velocity);
     }
 
     public void render(Graphics graphics) {
