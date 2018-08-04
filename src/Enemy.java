@@ -12,14 +12,18 @@ public class Enemy {
     public int width;
     public int height;
     public Vector2D velocity;
+    public Renderer renderer;
 
     private List<BulletEnemy> bulletEnemies;
     private int timeIntervalBullet = 0;
 
-    public Enemy() {
+    public Enemy(int width, int height) {
+        this.width = width;
+        this.height = height;
         this.position = new Vector2D();
         this.velocity = new Vector2D();
         this.bulletEnemies = new ArrayList<>();
+        this.renderer = new ImageRenderer("resources/images/circle.png", this.width, this.height);
     }
 
     public void run() {
@@ -28,14 +32,9 @@ public class Enemy {
     }
 
     private void shoot() {
-        if (this.timeIntervalBullet == 30) {
+        if (this.timeIntervalBullet == 100) {
             for (double angle = 0.0; angle < 360.0; angle += 360.0 / 15) {
                 BulletEnemy bulletEnemy = new BulletEnemy();
-                try {
-                    bulletEnemy.image = ImageIO.read(new File("resources/images/circle.png"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 bulletEnemy.position.set(this.position);
                 bulletEnemy.velocity.set(
                         (new Vector2D(2, 0)).rotate(angle)
@@ -50,7 +49,7 @@ public class Enemy {
     }
 
     public void render(Graphics graphics) {
-        graphics.drawImage(this.image, (int) this.position.x, (int) this.position.y, this.width, this.height, null);
+        this.renderer.render(graphics, this.position);
         this.bulletEnemies.forEach(bulletEnemy -> bulletEnemy.render(graphics));
     }
 }

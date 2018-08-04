@@ -54,12 +54,9 @@ public class GameCanvas extends JPanel {
     }
 
     private void createEnemy() {
-        if (this.timeIntervalEnemy == 50) {
-            Enemy enemy = new Enemy();
+        if (this.timeIntervalEnemy == 300) {
+            Enemy enemy = new Enemy(20,20);
             enemy.position.set(this.random.nextInt(1024), this.random.nextInt(600));
-            enemy.width = 20;
-            enemy.height = 20;
-            enemy.image = this.loadImage("resources/images/circle.png");
             enemy.velocity.set(this.random.nextInt(3) + 1, this.random.nextInt(3) + 1);
             this.enemies.add(enemy);
             this.timeIntervalEnemy = 0;

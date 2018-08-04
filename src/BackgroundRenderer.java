@@ -6,7 +6,7 @@ public class BackgroundRenderer implements Renderer {
 
     private Color color;
 
-    public BackgroundRenderer(int height, int width, Color color) {
+    public BackgroundRenderer(int width, int height, Color color) {
         this.height = height;
         this.width = width;
         this.color = color;

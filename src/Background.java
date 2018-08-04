@@ -22,6 +22,7 @@ public class Background {
         this.color = color;
         this.width = width;
         this.height = height;
+        this.position = new Vector2D();
         backgroundRenderer = new BackgroundRenderer(this.width, this.height, color);
     }
 
