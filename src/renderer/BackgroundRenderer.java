@@ -1,15 +1,19 @@
+package renderer;
+
+import base.Vector2D;
+
 import java.awt.*;
 
 public class BackgroundRenderer implements Renderer {
-    private int height;
-    private int width;
 
     private Color color;
+    private int width;
+    private int height;
 
-    public BackgroundRenderer(int width, int height, Color color) {
-        this.height = height;
-        this.width = width;
+    public BackgroundRenderer(Color color, int width, int height) {
         this.color = color;
+        this.width = width;
+        this.height = height;
     }
 
     @Override

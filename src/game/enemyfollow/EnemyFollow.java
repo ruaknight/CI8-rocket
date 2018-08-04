@@ -1,3 +1,9 @@
+package game.enemyfollow;
+
+import base.Vector2D;
+import renderer.ImageRenderer;
+import renderer.Renderer;
+
 import java.awt.*;
 public class EnemyFollow {
     public Vector2D position;

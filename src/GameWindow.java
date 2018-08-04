@@ -1,3 +1,5 @@
+import base.Vector2D;
+
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -5,13 +7,17 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class GameWindow extends JFrame {
+
     private GameCanvas gameCanvas;
     private long lastTime = 0;
 
     public GameWindow() {
         this.setSize(1024, 600);
+
         this.setupGameCanvas();
+
         this.event();
+
         this.setVisible(true);
     }
 
@@ -31,6 +37,7 @@ public class GameWindow extends JFrame {
 
             @Override
             public void keyTyped(KeyEvent e) {
+
             }
 
             @Override
@@ -50,6 +57,7 @@ public class GameWindow extends JFrame {
                 gameCanvas.player.velocity.set(
                         defaultVelocity.rotate(gameCanvas.player.angle)
                 );
+
             }
 
             @Override
@@ -57,6 +65,7 @@ public class GameWindow extends JFrame {
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     defaultVelocity = new Vector2D(3.5f, 0);
                 }
+
                 gameCanvas.player.velocity.set(
                         defaultVelocity.rotate(gameCanvas.player.angle)
                 );
