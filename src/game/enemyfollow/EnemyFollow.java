@@ -3,7 +3,6 @@ package game.enemyfollow;
 import base.GameObject;
 import base.GameObjectManager;
 import base.Vector2D;
-import game.player.Player;
 import renderer.ImageRenderer;
 
 public class EnemyFollow extends GameObject{
@@ -28,11 +27,6 @@ public class EnemyFollow extends GameObject{
     }
 
     public Vector2D searchPlayer() {
-        for (GameObject gameObject: GameObjectManager.instance.list) {
-            if (gameObject.getClass() == Player.class) {
-                return ((Player) gameObject).position;
-            }
-        }
-        return null;
+        return GameObjectManager.instance.searchPlayer().position;
     }
 }

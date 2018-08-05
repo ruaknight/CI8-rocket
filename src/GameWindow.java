@@ -1,23 +1,21 @@
-import base.Vector2D;
+import base.GameObject;
+import base.GameObjectManager;
+import base.KeyboardEvent;
+import game.player.Player;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class GameWindow extends JFrame {
+public class GameWindow extends JFrame{
 
     private GameCanvas gameCanvas;
     private long lastTime = 0;
 
     public GameWindow() {
         this.setSize(1024, 600);
-
         this.setupGameCanvas();
-
         this.event();
-
         this.setVisible(true);
     }
 
@@ -27,50 +25,15 @@ public class GameWindow extends JFrame {
     }
 
     private void event() {
-        this.keyboardEvent();
         this.windowEvent();
     }
 
     private void keyboardEvent() {
-        this.addKeyListener(new KeyListener() {
-            Vector2D defaultVelocity = new Vector2D(3.5f, 0);
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    gameCanvas.player.angle -= 5.0;
-                }
-                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    gameCanvas.player.angle += 5.0;
-                }
-
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    defaultVelocity = defaultVelocity.multiply(2);
-                }
-
-                gameCanvas.player.velocity.set(
-                        defaultVelocity.rotate(gameCanvas.player.angle)
-                );
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    defaultVelocity = new Vector2D(3.5f, 0);
-                }
-
-                gameCanvas.player.velocity.set(
-                        defaultVelocity.rotate(gameCanvas.player.angle)
-                );
-            }
-        });
+        GameObject temp = GameObjectManager.instance.searchPlayer();
+        if (temp != null) {
+            ((Player) temp).velocity.rotate(KeyboardEvent.keyboardEvent.angle);
+            ((Player) temp).velocity.multiply(KeyboardEvent.keyboardEvent.multiplier);
+        }
     }
 
     private void windowEvent() {
@@ -86,6 +49,8 @@ public class GameWindow extends JFrame {
         while (true) {
             long currentTime = System.nanoTime();
             if (currentTime - this.lastTime >= 17_000_000) {
+                KeyboardEvent.keyboardEvent.runKeyboard();
+                System.out.println(KeyboardEvent.keyboardEvent.angle);
                 this.gameCanvas.runAll();
                 this.gameCanvas.renderAll();
                 this.lastTime = currentTime;

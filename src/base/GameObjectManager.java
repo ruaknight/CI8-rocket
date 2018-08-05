@@ -1,5 +1,7 @@
 package base;
 
+import game.player.Player;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,15 @@ public class GameObjectManager {
         this.list.forEach(gameObject -> gameObject.run());
         this.list.addAll(this.tempList);
         this.tempList.clear();
+    }
+
+    public Player searchPlayer() {
+        for (GameObject gameObject: GameObjectManager.instance.list) {
+            if (gameObject.getClass() == Player.class) {
+                return ((Player) gameObject);
+            }
+        }
+        return null;
     }
 
     public void renderAll(Graphics graphics) {
