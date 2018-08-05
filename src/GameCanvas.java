@@ -1,5 +1,6 @@
 import base.GameObjectManager;
 import game.background.Background;
+import game.enemyfollow.EnemyFollow;
 import game.player.Player;
 import game.enemy.CreateEnemy;
 import game.star.CreateStar;
@@ -9,21 +10,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GameCanvas extends JPanel {
-
     private BufferedImage backBuffered;
-
     public Player player;
-
     private Graphics graphics;
 
     public GameCanvas() {
-
         this.setSize(1024, 600);
-
         this.setupBackBuffered();
-
         this.setupCharacter();
-
         this.setVisible(true);
     }
 
@@ -36,6 +30,7 @@ public class GameCanvas extends JPanel {
         GameObjectManager.instance.add(new Background());
         GameObjectManager.instance.add(new CreateStar());
         GameObjectManager.instance.add(new CreateEnemy());
+        GameObjectManager.instance.add(new EnemyFollow());
         this.setupPlayer();
     }
 

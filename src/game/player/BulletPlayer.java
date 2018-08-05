@@ -18,5 +18,4 @@ public class BulletPlayer extends GameObject {
         super.run();
         this.position.addUp(this.velocity);
     }
-
 }
